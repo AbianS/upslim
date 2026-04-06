@@ -1,0 +1,56 @@
+[package]
+name = "upslim-server"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.86"
+description = "Minimal Rust uptime monitoring server"
+license = "MIT"
+repository = "https://github.com/AbianS/upslim"
+homepage = "https://abians7.github.io/upslim"
+keywords = ["monitoring", "uptime", "alerting", "http", "slack"]
+categories = ["network-programming", "command-line-utilities"]
+
+[[bin]]
+name = "upslim-server"
+path = "src/main.rs"
+
+[dependencies]
+# Async runtime — solo los features que usamos
+tokio = { version = "1.51.0", features = ["rt-multi-thread", "net", "time", "signal", "sync", "macros"] }
+
+# HTTP client para checks salientes y webhook de Slack
+# rustls-tls: TLS via rustls (no openssl)
+# default-features = false: quita hyper/tokio native-tls
+reqwest = { version = "0.12.28", default-features = false, features = ["json", "rustls-tls"] }
+
+# Serialización
+serde = { version = "1.0.228", features = ["derive"] }
+serde_yaml = "0.9.34"
+serde_json = "1.0.149"
+
+# Substitución ${ENV_VAR} en el YAML antes de parsear
+shellexpand = "3.1.2"
+
+# Errores
+thiserror = "2.0.18"
+
+# Logging
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", default-features = false, features = ["env-filter", "fmt", "ansi"] }
+
+# Timestamps en AlertState y mensajes Slack
+chrono = { version = "0.4.44", default-features = false, features = ["std", "clock", "serde"] }
+
+# CancellationToken para graceful shutdown
+tokio-util = { version = "0.7.18", default-features = false, features = ["rt"] }
+
+# async fn en traits con soporte dyn
+async-trait = "0.1.89"
+
+[dev-dependencies]
+rstest = "0.26.1"
+serial_test = "3.4.0"
+tokio-test = "0.4.5"
+pretty_assertions = "1.4.1"
+wiremock = "0.6.5"
+tempfile = "3.27.0"

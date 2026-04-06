@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "types": ["node"]
+  },
+  "include": [".vitepress/**/*.ts"],
+  "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
+}

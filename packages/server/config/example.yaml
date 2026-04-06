@@ -1,0 +1,88 @@
+# ──────────────────────────────────────────────────────────────
+# upslim-server — example configuration
+#
+# Usage:
+#   upslim-server --config /path/to/config.yaml
+#   upslim-server --config /path/to/config/   (loads all *.yaml files in the directory)
+#
+# Environment variables:
+#   UPSLIM_STATE_DIR     Directory to persist alert state (default: ./state)
+#   UPSLIM_MAX_CONCURRENT Maximum concurrent checks (default: 10)
+#   RUST_LOG             Log level: trace|debug|info|warn|error (default: info)
+#
+# Env var substitution: use ${VAR_NAME} in any string value.
+# ──────────────────────────────────────────────────────────────
+
+# Global defaults — applied to all monitors unless overridden per monitor.
+defaults:
+  interval: 60s           # How often to run the check
+  timeout: 30s            # Timeout per check
+  failure_threshold: 3    # Consecutive failures before triggering an alert
+  success_threshold: 2    # Consecutive successes to mark as recovered
+  send_on_resolved: true  # Also notify when the monitor recovers
+
+# ──────────────────────────────────────────────────────────────
+# Alert providers
+# ──────────────────────────────────────────────────────────────
+alerting:
+  - name: slack-ops          # Reference name (used in monitors.alerts[].name)
+    type: slack
+    token: ${SLACK_BOT_TOKEN}      # Bot token — must start with xoxb-
+    channel: "#ops-alerts"         # Target channel (name or ID like C1234567890)
+    reminder_interval: 2h          # Re-notify every 2h while still down (optional; supports: s, m, h)
+
+# ──────────────────────────────────────────────────────────────
+# Monitors
+# ──────────────────────────────────────────────────────────────
+monitors:
+
+  # ── Basic HTTP check ──
+  - name: "website"
+    type: http
+    url: "https://example.com"
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 2000"
+    alerts:
+      - name: slack-ops
+
+  # ── HTTP check with JSON body ──
+  - name: "api-health"
+    type: http
+    url: "https://api.example.com/health"
+    interval: 30s
+    timeout: 10s
+    method: GET
+    headers:
+      Authorization: "Bearer ${API_TOKEN}"
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 500"
+      - "[BODY].status == healthy"    # JSON dot-path
+    alerts:
+      - name: slack-ops
+        failure_threshold: 2          # Override: more aggressive for this monitor
+
+  # ── TCP check ──
+  - name: "db-postgres"
+    type: tcp
+    host: "db.internal"
+    port: 5432
+    interval: 60s
+    timeout: 5s
+    conditions:
+      - "[CONNECTED] == true"
+    alerts:
+      - name: slack-ops
+
+  # ── TCP check Redis ──
+  - name: "redis"
+    type: tcp
+    host: "redis.internal"
+    port: 6379
+    interval: 30s
+    conditions:
+      - "[CONNECTED] == true"
+    alerts:
+      - name: slack-ops

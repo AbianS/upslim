@@ -1,0 +1,126 @@
+/* ─────────────────────────────────────────────────────────
+   UpSlim — custom VitePress theme
+   Brand: #22C55E (green-500) on zinc-950 dark background
+   ───────────────────────────────────────────────────────── */
+
+/* Brand colors — green matching the logo live-indicator dot */
+:root {
+  --vp-c-brand-1: #22c55e;
+  --vp-c-brand-2: #16a34a;
+  --vp-c-brand-3: #15803d;
+  --vp-c-brand-soft: rgba(34, 197, 94, 0.12);
+}
+
+/* Dark mode overrides */
+.dark {
+  --vp-c-brand-1: #4ade80;
+  --vp-c-brand-2: #22c55e;
+  --vp-c-brand-3: #16a34a;
+  --vp-c-brand-soft: rgba(74, 222, 128, 0.12);
+
+  /* Slightly darker background — closer to the logo's #09090B */
+  --vp-c-bg: #09090b;
+  --vp-c-bg-soft: #111113;
+  --vp-c-bg-mute: #18181b;
+
+  /* Subtle borders */
+  --vp-c-divider: rgba(255, 255, 255, 0.07);
+  --vp-c-border: rgba(255, 255, 255, 0.10);
+}
+
+/* ── Hero name — gradient white → green ── */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    135deg,
+    #ffffff 30%,
+    #4ade80 100%
+  );
+}
+
+/* Hero image background glow */
+:root {
+  --vp-home-hero-image-background-image: radial-gradient(
+    ellipse at center,
+    rgba(34, 197, 94, 0.18) 0%,
+    transparent 70%
+  );
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+/* ── Buttons ── */
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: #22c55e;
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-bg: #16a34a;
+  --vp-button-brand-active-bg: #15803d;
+}
+
+/* ── Nav ── */
+.dark .VPNav {
+  background-color: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Sidebar active item ── */
+.dark .VPSidebarItem.is-active > .item .text {
+  color: var(--vp-c-brand-1);
+}
+
+/* ── Code blocks ── */
+.dark .vp-code-group .tabs label:hover {
+  color: var(--vp-c-brand-1);
+}
+
+/* ── Links ── */
+.dark a:not(.VPButton):not(.VPNavBarMenuLink):not(.VPLink) {
+  color: var(--vp-c-brand-1);
+}
+
+/* ── Feature cards ── */
+.dark .VPFeature {
+  background-color: #111113;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dark .VPFeature:hover {
+  border-color: rgba(34, 197, 94, 0.35);
+  background-color: #18181b;
+}
+
+.dark .VPFeature .icon {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  padding: 6px;
+}
+
+/* ── Home hero section ── */
+.dark .VPHero .tagline {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Search box ── */
+.dark .DocSearch-Button {
+  background-color: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Custom scrollbar (webkit) ── */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(34, 197, 94, 0.4);
+}

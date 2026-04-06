@@ -1,0 +1,17 @@
+services:
+  upslim:
+    build:
+      context: ../..
+      dockerfile: packages/server/Dockerfile
+    image: upslim-server:local
+    volumes:
+      - ./config:/config:ro
+      - upslim-state:/data
+    environment:
+      UPSLIM_STATE_DIR: /data
+      UPSLIM_MAX_CONCURRENT: "10"
+      RUST_LOG: info
+    restart: unless-stopped
+
+volumes:
+  upslim-state:
