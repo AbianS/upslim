@@ -4,7 +4,7 @@ use tracing::debug;
 
 use crate::{
     checker::Checker,
-    condition::{evaluate, EvalContext},
+    condition::{EvalContext, evaluate},
     error::{Result, UpslimError},
     types::{CheckKind, CheckResult, Monitor},
 };

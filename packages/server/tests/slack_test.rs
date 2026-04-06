@@ -2,10 +2,10 @@ mod common;
 
 use chrono::Utc;
 use upslim_server::{
-    alert::{slack::SlackProvider, AlertProvider},
+    alert::{AlertProvider, slack::SlackProvider},
     types::{AlertMessage, CheckResult, SlackProviderConfig},
 };
-use wiremock::{matchers, Mock, MockServer, ResponseTemplate};
+use wiremock::{Mock, MockServer, ResponseTemplate, matchers};
 
 fn make_provider(server_uri: &str) -> SlackProvider {
     // In tests we point to the mock server. Since SlackProvider has CHAT_POST_MESSAGE
@@ -135,7 +135,10 @@ async fn sends_fire_notification_to_slack_api() {
         .await;
 
     let provider = make_provider_with_base(&server.uri(), "xoxb-test-123", "#ops-alerts");
-    provider.send_msg(&fire_message()).await.expect("send failed");
+    provider
+        .send_msg(&fire_message())
+        .await
+        .expect("send failed");
 }
 
 #[tokio::test]
@@ -184,16 +187,16 @@ async fn payload_contains_channel() {
 
     Mock::given(matchers::method("POST"))
         .and(matchers::body_string_contains("#ops-alerts"))
-        .respond_with(
-            ResponseTemplate::new(200)
-                .set_body_json(serde_json::json!({"ok": true})),
-        )
+        .respond_with(ResponseTemplate::new(200).set_body_json(serde_json::json!({"ok": true})))
         .expect(1)
         .mount(&server)
         .await;
 
     let provider = make_provider_with_base(&server.uri(), "xoxb-test-123", "#ops-alerts");
-    provider.send_msg(&fire_message()).await.expect("send failed");
+    provider
+        .send_msg(&fire_message())
+        .await
+        .expect("send failed");
 }
 
 // Validate tests (no I/O, using the real SlackProvider)
