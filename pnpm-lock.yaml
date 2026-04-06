@@ -30,6 +30,8 @@ importers:
         specifier: 1.6.3
         version: 1.6.3(@algolia/client-search@5.50.1)(@types/node@22.15.3)(postcss@8.5.8)(search-insights@2.17.3)(typescript@6.0.2)
 
+  packages/server: {}
+
 packages:
 
   '@algolia/abtesting@1.16.1':

@@ -57,8 +57,8 @@ jobs:
       - name: Create GitHub releases
         if: steps.check.outputs.has_changesets == 'false'
         run: |
-          # Server release — version from Cargo.toml
-          SERVER_VERSION=$(grep '^version' packages/server/Cargo.toml | head -1 | sed 's/.*= *"\(.*\)"/\1/')
+          # Server release — version from package.json (managed by changesets)
+          SERVER_VERSION=$(node -p "require('./packages/server/package.json').version")
           SERVER_TAG="upslim-server@${SERVER_VERSION}"
 
           if ! git tag -l | grep -q "^${SERVER_TAG}$"; then

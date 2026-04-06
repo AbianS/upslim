@@ -1,0 +1,14 @@
+{
+  "name": "upslim-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "cargo build --release -p upslim-server",
+    "build:dev": "cargo build -p upslim-server",
+    "test": "cargo test -p upslim-server",
+    "lint": "cargo clippy -p upslim-server -- -D warnings",
+    "check-types": "cargo check -p upslim-server",
+    "format": "cargo fmt -p upslim-server",
+    "format:check": "cargo fmt -p upslim-server -- --check"
+  }
+}
