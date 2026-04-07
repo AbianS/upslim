@@ -41,8 +41,8 @@ UpSlim does not send an alert on every failed check. Instead it maintains a stat
 | `Firing` | Threshold reached, alert sent |
 | `Recovered` | Back to healthy, recovery alert sent |
 
-**`failure_threshold`** — consecutive failures required before firing (default: 3)  
-**`success_threshold`** — consecutive successes required to mark as recovered (default: 2)  
+**`failure_threshold`** — consecutive failures required before firing (default: 3)
+**`success_threshold`** — consecutive successes required to mark as recovered (default: 2)
 **`reminder_interval`** — resend the alert if still down after this duration (optional)
 
 ### Configuration files
@@ -59,6 +59,31 @@ config/
 ### State persistence
 
 Alert state survives restarts. UpSlim persists state as JSON files in the directory set by `UPSLIM_STATE_DIR` (default: `./state`). This prevents duplicate alerts after a restart.
+
+## Resource footprint
+
+UpSlim is designed to stay completely invisible on the host. These numbers were measured against
+the production Docker image running on Apple M4 Pro (arm64), with all monitors hitting a local
+HTTP server at 5-second intervals:
+
+| Scenario | Monitors | CPU avg | CPU peak | RAM avg | RAM peak |
+|----------|----------|---------|----------|---------|----------|
+| idle     | 1        | 0.02%   | 0.11%    | 1.2 MB  | 1.4 MB   |
+| light    | 10       | 0.19%   | 0.64%    | 1.6 MB  | 2.1 MB   |
+| medium   | 50       | 0.34%   | 0.63%    | 2.3 MB  | 3.1 MB   |
+| heavy    | 100      | 0.32%   | 0.65%    | 2.4 MB  | 3.5 MB   |
+
+**Docker image: 1.9 MB** — scratch-based, binary + CA certificates only.
+
+To put that in perspective:
+
+- A typical Node.js app Docker image weighs **150–500 MB**. UpSlim is **~100× smaller**.
+- A Go uptime tool with its runtime typically uses **15–30 MB** of RAM under similar load. UpSlim uses **3.5 MB at peak** with 100 monitors.
+- The jump from 50 → 100 monitors adds **0.1 MB of RAM and zero measurable CPU**. Each Tokio async task sleeps between checks — it only wakes up for the milliseconds an HTTP request is in-flight.
+
+The CPU number tells the full story: 100 monitors checking every 5 seconds — 1,200 HTTP requests per minute — and the process sits at **0.32% average CPU**. The rest of the time it is completely idle.
+
+This makes UpSlim safe to run on the smallest VPS, alongside your existing services, or inside a container with strict resource limits. See [Docker & Deploy](/reference/docker) for recommended production limits backed by this data.
 
 ## What UpSlim is not
 

@@ -9,7 +9,9 @@
     "check-types": "turbo run check-types",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "bench": "pnpm --filter @upslim/benchmark bench",
+    "bench:quick": "pnpm --filter @upslim/benchmark bench:quick"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",

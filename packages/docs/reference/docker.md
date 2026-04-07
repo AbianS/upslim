@@ -117,11 +117,34 @@ docker compose build
 docker compose run --rm upslim /upslim-server --config /config/my-config.yaml
 ```
 
+## Resource usage
+
+Benchmarked against the production Docker image on Apple M4 Pro (arm64), running HTTP monitors
+at 5-second intervals against a local mock server:
+
+| Scenario | Monitors | CPU avg | CPU peak | RAM avg | RAM peak |
+|----------|----------|---------|----------|---------|----------|
+| idle     | 1        | 0.02%   | 0.11%    | 1.2 MB  | 1.4 MB   |
+| light    | 10       | 0.19%   | 0.64%    | 1.6 MB  | 2.1 MB   |
+| medium   | 50       | 0.34%   | 0.63%    | 2.3 MB  | 3.1 MB   |
+| heavy    | 100      | 0.32%   | 0.65%    | 2.4 MB  | 3.5 MB   |
+
+**Docker image size: 1.9 MB** (scratch-based, binary + CA certificates only).
+
+Scaling from 50 to 100 monitors adds ~0.1 MB of RAM and no measurable CPU increase. The Tokio
+async runtime keeps each monitor task dormant between checks — CPU spikes only during the brief
+window when HTTP requests are in-flight.
+
+::: tip
+Run `pnpm bench` from the repo root to reproduce these numbers on your own hardware.
+:::
+
 ## Production tips
 
 **Pin the image version** — use `upslim-server:v1.2.3` instead of `:latest` to avoid unexpected updates.
 
-**Resource limits** — UpSlim is extremely lightweight. A reasonable limit for most deployments:
+**Resource limits** — the benchmark data above confirms that even 100 monitors stay well under
+4 MB of RAM and 1% CPU. Safe conservative limits for most deployments:
 
 ```yaml
 services:

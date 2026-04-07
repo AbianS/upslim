@@ -1,0 +1,17 @@
+{
+  "name": "@upslim/benchmark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Resource benchmark and stress tests for the UpSlim production Docker image",
+  "scripts": {
+    "bench": "tsx src/index.ts",
+    "bench:quick": "tsx src/index.ts --quick"
+  },
+  "dependencies": {
+    "@types/node": "25.5.2",
+    "tsx": "4.21.0",
+    "typescript": "6.0.2",
+    "yaml": "2.8.3"
+  }
+}

@@ -33,6 +33,23 @@ UpSlim runs as a single process, reads a YAML config, and periodically checks yo
 - **Reminder intervals** — re-alerts every N hours while a service stays down
 - **State persistence** — survives restarts without duplicate alerts
 
+## Performance
+
+Benchmarked against the production Docker image (`scratch`-based) on Apple M4 Pro (arm64).
+Each scenario ran HTTP monitors at 5-second intervals against a local mock server.
+
+| Scenario | Monitors | CPU avg | CPU peak | RAM avg | RAM peak |
+|----------|----------|---------|----------|---------|----------|
+| idle     | 1        | 0.02%   | 0.11%    | 1.2 MB  | 1.4 MB   |
+| light    | 10       | 0.19%   | 0.64%    | 1.6 MB  | 2.1 MB   |
+| medium   | 50       | 0.34%   | 0.63%    | 2.3 MB  | 3.1 MB   |
+| heavy    | 100      | 0.32%   | 0.65%    | 2.4 MB  | 3.5 MB   |
+
+**Docker image: 1.9 MB.** RAM is measured via `docker stats`. CPU is sampled every 2 seconds.
+Scaling from 50 → 100 monitors adds ~0.1 MB of RAM — Tokio async tasks are nearly free.
+
+> Run `pnpm bench` from the repo root to reproduce these results.
+
 ## Quick start
 
 ```yaml

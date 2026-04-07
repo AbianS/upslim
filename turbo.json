@@ -16,6 +16,11 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "bench": {
+      "dependsOn": [],
+      "cache": false,
+      "outputs": ["packages/benchmark/results/**"]
     }
   }
 }
