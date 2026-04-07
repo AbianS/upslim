@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="packages/docs/public/logo.svg" width="64" height="64" alt="UpSlim logo" />
+  <img src="packages/docs/public/logo.svg" width="128" height="128" alt="UpSlim logo" />
 </p>
 
 <h1 align="center">UpSlim</h1>
