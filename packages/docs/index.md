@@ -21,11 +21,11 @@ hero:
 features:
   - icon: 🦀
     title: Written in Rust
-    details: Static binary under 5 MB. Near-zero idle memory. No runtime dependencies.
+    details: 1.9 MB Docker image. 1.2 MB RAM at rest. No runtime dependencies, no GC pauses, no surprises.
 
   - icon: ⚡
-    title: Fast and concurrent
-    details: Each monitor runs in its own async task. Semaphore-controlled concurrency. Configurable from 1 to N parallel checks.
+    title: 100 monitors, 3.5 MB RAM
+    details: Each monitor is a dormant Tokio task. Scaling from 50 to 100 monitors adds under 0.1 MB. CPU stays below 0.65% even under full load.
 
   - icon: 📄
     title: YAML configuration

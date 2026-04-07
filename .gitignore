@@ -45,3 +45,6 @@ packages/docs/.vitepress/cache
 
 # Local test configs with real credentials — never commit
 packages/server/config/test-local.yaml
+
+# Benchmark results — hardware-specific, not committed
+packages/benchmark/results/*.md
